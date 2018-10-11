@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Start-Class: com.cognizant.osp.fsd.pms.policymanagement.PolicyManageme
+ ntApplication
+Main-Class: org.springframework.boot.loader.JarLauncher
+
