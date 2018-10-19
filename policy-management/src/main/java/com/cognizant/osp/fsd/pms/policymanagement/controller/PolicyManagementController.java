@@ -3,6 +3,7 @@ package com.cognizant.osp.fsd.pms.policymanagement.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,29 +38,44 @@ public class PolicyManagementController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "userInfo", required = false, dataType = "UserInfo", paramType = "body")
       })
+	@CrossOrigin
     @ApiResponses(value = { 
             @ApiResponse(code = 200, message = "Success", response = Boolean.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")}) 
-	public Boolean checkUser(@RequestBody UserInfo userInfo) {
-		return userService.checkIfValidUser(userInfo.getUsername(), userInfo.getPassword());
+	public UserDTO userLogin(@RequestBody UserInfo userInfo) {
+		return userService.loginUSer(userInfo.getUsername(), userInfo.getPassword());
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, path="/users/{username}" , produces = "application/json")
-	@ApiOperation(value = "/users/{username}", nickname = "user")
+	@RequestMapping(method=RequestMethod.GET, path="/users/{userId}" , produces = "application/json")
+	@ApiOperation(value = "/users/{userId}", nickname = "user")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "username", required = true, dataType = "string", paramType = "path")
+        @ApiImplicitParam(name = "userId", required = true, dataType = "string", paramType = "path")
       })
+    @ApiResponses(value = { 
+            @ApiResponse(code = 200, message = "Success", response = UserDTO.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")}) 
+	@CrossOrigin
+	public UserDTO getUserDetailsById(@PathVariable(value="userId") Integer userId) {
+		return userService.getUserDetailsByUserId(userId);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/users" , produces = "application/json")
+	@ApiOperation(value = "/users", nickname = "user")
+    @CrossOrigin
     @ApiResponses(value = { 
             @ApiResponse(code = 200, message = "Success", response = Boolean.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Failure")}) 
-	public UserDTO getUserDetailsByUserName(@PathVariable(value="username") String username) {
-		return userService.getUserDetailsByUserName(username);
+	public List<UserDTO> getAllUsers() {
+		return userService.getUsers();
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, path="/users" , produces = "application/json")
@@ -67,6 +83,7 @@ public class PolicyManagementController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "userDTO", required = false, dataType = "UserDTO", paramType = "body")
       })
+	@CrossOrigin
     @ApiResponses(value = { 
             @ApiResponse(code = 200, message = "Success", response = Boolean.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -86,6 +103,7 @@ public class PolicyManagementController {
         @ApiImplicitParam(name = "username", required = true, dataType = "String", paramType = "path")
         
       })
+	@CrossOrigin
     @ApiResponses(value = { 
             @ApiResponse(code = 200, message = "Success", response = Boolean.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
@@ -98,7 +116,19 @@ public class PolicyManagementController {
 	}
 	
 	
-	
+	@RequestMapping(method=RequestMethod.GET,path="/policies/", produces = "application/json")
+	@ApiOperation(value = "/policies/", nickname = "policy")
+	@CrossOrigin
+    @ApiResponses(value = { 
+            @ApiResponse(code = 200, message = "Success", response = Boolean.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")}) 
+	public List<PolicyDTO> getAllPolicies() {
+		return policyService.getAllPolicies();
+		
+	}
 	
 	
 	

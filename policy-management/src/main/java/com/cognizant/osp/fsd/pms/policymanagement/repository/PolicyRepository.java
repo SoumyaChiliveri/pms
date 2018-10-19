@@ -10,7 +10,7 @@ import com.cognizant.osp.fsd.pms.policymanagement.entity.PolicyEntity;
 @Repository
 public interface PolicyRepository extends JpaRepository<PolicyEntity, Integer>{
 
-	List<PolicyEntity> findByUsers_Username(String username);
+	List<PolicyEntity> findByPolicyDetails(String username);
 	
 	
 }

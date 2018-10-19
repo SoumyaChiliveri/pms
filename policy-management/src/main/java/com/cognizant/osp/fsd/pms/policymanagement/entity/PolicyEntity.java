@@ -1,13 +1,13 @@
 package com.cognizant.osp.fsd.pms.policymanagement.entity;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 
@@ -20,10 +20,9 @@ public class PolicyEntity {
 	private String policyName;
 	private String policyDetails;
 
-	@ManyToMany
-	(mappedBy = "policies")
-	//@JoinTable(name="USER_POLICY")
-	private Set<UserEntity> users;
+
+	@OneToMany(mappedBy="user")
+	private List<UserPolicyEntity> userPolicies;
 	
 	@Override
     public boolean equals(Object o) {

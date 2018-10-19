@@ -1,14 +1,12 @@
 package com.cognizant.osp.fsd.pms.policymanagement.entity;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import lombok.Data;
 
@@ -27,22 +25,13 @@ public class UserEntity {
 	private String address;
 	private String phone;
 	private String email;
-	@ManyToMany
-	@JoinTable(name = "User_Policy"
-			,joinColumns = {@JoinColumn (name= "userId")}
-			, inverseJoinColumns = { @JoinColumn(name = "policyId") })
-	private Set<PolicyEntity> policies;
+	private String password;
+
+	@OneToMany(mappedBy="policy")
+	private List<UserPolicyEntity> userPolicies;
 	
-	public void addPolicy(PolicyEntity policy) {
-        policies.add(policy);
-        policy.getUsers().add(this);
-    }
- 
-    public void removePolicy(PolicyEntity policy) {
-        policies.remove(policy);
-        policy.getUsers().remove(this);
-    }
-    @Override
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserEntity)) return false;
@@ -51,6 +40,6 @@ public class UserEntity {
  
     @Override
     public int hashCode() {
-        return 31;
+        return userId;
     }
 }

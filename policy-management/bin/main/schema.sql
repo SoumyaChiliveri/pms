@@ -5,7 +5,8 @@ CREATE TABLE User(
     lastName VARCHAR(50) NOT NULL,
     address VARCHAR(50) NOT NULL,
     phone VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL
+    email VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
 
 );
 CREATE TABLE Policy(
@@ -14,6 +15,7 @@ CREATE TABLE Policy(
     policyDetails VARCHAR(50) NOT NULL
 );
 CREATE TABLE User_Policy(
+    userPolicyId INT NOT NULL,
     userId INT NOT NULL,
     policyId INT NOT NULL,
     amountPaid DOUBLE,

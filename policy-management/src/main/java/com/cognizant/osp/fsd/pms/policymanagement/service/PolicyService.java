@@ -18,10 +18,14 @@ public class PolicyService {
 		if("Admin".equalsIgnoreCase(username)) {
 			return policyRepository.findAll().stream().map(policyEntity -> new PolicyDTO(policyEntity)).collect(Collectors.toList());
 		}else {
-			return policyRepository.findByUsers_Username(username).stream().map(policyEntity -> new PolicyDTO(policyEntity)).collect(Collectors.toList());
+			return policyRepository.findByPolicyDetails(username).stream().map(policyEntity -> new PolicyDTO(policyEntity)).collect(Collectors.toList());
 		}
 		
 		
+	}
+
+	public List<PolicyDTO> getAllPolicies() {
+		return policyRepository.findAll().stream().map(policyEntity -> new PolicyDTO(policyEntity)).collect(Collectors.toList());
 	}
 
 }

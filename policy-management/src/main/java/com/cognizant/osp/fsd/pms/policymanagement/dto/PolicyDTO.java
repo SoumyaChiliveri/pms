@@ -10,10 +10,11 @@ public class PolicyDTO {
 		this.policyId = policyEntity.getPolicyId();
 		this.policyDetails = policyEntity.getPolicyDetails();
 		this.policyName = policyEntity.getPolicyName();
+		
 	}
-
+	public PolicyDTO() {}
 	private Integer policyId;
 	private String policyName;
 	private String policyDetails;
-
+	//private PolicyUserDTO policyUserDTO;
 }

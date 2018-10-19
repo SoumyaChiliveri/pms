@@ -1,13 +1,15 @@
 package com.cognizant.osp.fsd.pms.policymanagement.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.cognizant.osp.fsd.pms.policymanagement.dto.UserDTO;
 import com.cognizant.osp.fsd.pms.policymanagement.entity.UserEntity;
+import com.cognizant.osp.fsd.pms.policymanagement.repository.UserPolicyRepository;
 import com.cognizant.osp.fsd.pms.policymanagement.repository.UserRepository;
 
 @Service
@@ -16,12 +18,17 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public boolean checkIfValidUser(String userid,String password) {
+	@Autowired
+	private UserPolicyRepository userPolicyRepository;
+	
+	public UserDTO loginUSer(String userid,String password) {
 		UserEntity userEntity =new UserEntity();
 		userEntity.setUsername(userid);
+		userEntity.setPassword(password);
 		
-		Optional<UserEntity> optionalUserEntity = userRepository.findOne(Example.of(userEntity));
-		return optionalUserEntity.isPresent();
+		Optional<UserEntity> optionalUserEntity = userRepository.findByUsernameAndPassword(userid, password);
+		userPolicyRepository.findAllByUser(optionalUserEntity.get());
+		return new UserDTO(optionalUserEntity.get());
 		
 	}
 	
@@ -33,16 +40,24 @@ public class UserService {
 		userEntity.setLastName(userDTO.getLastName());
 		userEntity.setPhone(userDTO.getPhone());
 		userEntity.setUsername(userDTO.getUsername());
+		userEntity.setPassword(userDTO.getPassword());
+		userEntity.setPhone(userDTO.getPhone());
 		userRepository.saveAndFlush(userEntity);
 		return userDTO;
 	}
 
-	public UserDTO getUserDetailsByUserName(String username) {
+	public UserDTO getUserDetailsByUserId(Integer userId) {
 		
-		Optional<UserEntity> optionalUserEntity = userRepository.findByUsername(username);
+		Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
 		UserEntity userEntityValue = optionalUserEntity.get();
 		UserDTO userDTO = new UserDTO(userEntityValue);
 		return userDTO;
+	}
+
+	public List<UserDTO> getUsers() {
+		return userRepository.findAll().stream().map(mapper -> new UserDTO(mapper)).collect(Collectors.toList());
+		
+		
 	}
 	
 	

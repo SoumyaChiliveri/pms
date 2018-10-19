@@ -1,16 +1,18 @@
 package com.cognizant.osp.fsd.pms.policymanagement.dto;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import com.cognizant.osp.fsd.pms.policymanagement.entity.PolicyEntity;
 import com.cognizant.osp.fsd.pms.policymanagement.entity.UserEntity;
+import com.cognizant.osp.fsd.pms.policymanagement.entity.UserPolicyEntity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserDTO {
-	private Set<PolicyDTO> policies;
+	private List<PolicyUserDTO> userPolicies;
 	private Integer userId;
 
 	public UserDTO(UserEntity userEntityValue) {
@@ -20,8 +22,9 @@ public class UserDTO {
 		this.lastName = userEntityValue.getLastName();
 		this.phone = userEntityValue.getPhone();
 		this.username = userEntityValue.getUsername();
-		this.policies = getPolicyDTOs(userEntityValue.getPolicies());
+		this.userPolicies = getPolicyDTOs(userEntityValue.getUserPolicies());
 		this.userId = userEntityValue.getUserId();
+		this.password = userEntityValue.getPassword();
 	}
 
 	private String username;
@@ -30,10 +33,11 @@ public class UserDTO {
 	private String address;
 	private String phone;
 	private String email;
+	private String password;
 	
-	private Set<PolicyDTO> getPolicyDTOs(Set<PolicyEntity> policyEntitySet){
-		Set<PolicyDTO> policyDTOSet = policyEntitySet.stream().map(policyEntity -> new PolicyDTO(policyEntity)).collect(Collectors.toSet());
-		return policyDTOSet;
+	private List<PolicyUserDTO> getPolicyDTOs(List<UserPolicyEntity> policyUserEntityList){
+		List<PolicyUserDTO> policyUserDTOList = policyUserEntityList.stream().map(policyEntity -> new PolicyUserDTO(policyEntity,policyEntity.getPolicy())).collect(Collectors.toList());
+		return policyUserDTOList;
 	}
 
 	
